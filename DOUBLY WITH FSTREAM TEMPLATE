@@ -5,11 +5,11 @@ using namespace std;
 
 // Struct for storing data records
 struct StructName {
-    int dataNo;
-    double doubleData;
-    string stringData;
-    StructName* next;
-    StructName* prev;
+	int dataNo;
+	double doubleData;
+	string stringData;
+	StructName* next;
+	StructName* prev;
 };
 
 // Function prototypes
@@ -23,226 +23,228 @@ void LoadDataFromFile(StructName*& head, int& numData, int& dataNoCounter);
 
 // Main function
 int main() {
-    int numData = 0; // Variable to track the number of data
-    int dataNoCounter = 1; // Counter to assign unique data numbers
-    int choice;
-    StructName* head = nullptr; // Head pointer of the linked list
+	int numData = 0; // Variable to track the number of data
+	int dataNoCounter = 1; // Counter to assign unique data numbers
+	int choice;
+	StructName* head = nullptr; // Head pointer of the linked list
 
-    // Load data from file
-    LoadDataFromFile(head, numData, dataNoCounter);
+	// Load data from file
+	LoadDataFromFile(head, numData, dataNoCounter);
 
-    // Menu loop
-    do {
-        MainMenu();
-        cin >> choice;
-        cin.ignore();
-        system("cls");
+	// Menu loop
+	do {
+		MainMenu();
+		cin >> choice;
+		cin.ignore();
+		system("cls");
 
-        switch (choice) {
-        case 1:
-            AddData(head, numData, dataNoCounter);
-            system("pause");
-            system("cls");
-            break;
-        case 2:
-            ViewData(head);
-            system("pause");
-            system("cls");
-            break;
-        case 3:
-            UpdateData(head);
-            system("pause");
-            system("cls");
-            break;
-        case 4:
-            DeleteData(head, numData);
-            system("pause");
-            system("cls");
-            break;
-        case 5:
-            SaveDataToFile(head);
-            cout << "Exiting...\n";
-            break;
-        default:
-            cout << "Invalid choice! Please enter a valid option.\n";
-        }
-    } while (choice != 5);
+		switch (choice) {
+		case 1:
+			AddData(head, numData, dataNoCounter);
+			system("pause");
+			system("cls");
+			break;
+		case 2:
+			ViewData(head);
+			system("pause");
+			system("cls");
+			break;
+		case 3:
+			UpdateData(head);
+			system("pause");
+			system("cls");
+			break;
+		case 4:
+			DeleteData(head, numData);
+			system("pause");
+			system("cls");
+			break;
+		case 5:
+			SaveDataToFile(head);
+			cout << "Exiting...\n";
+			break;
+		default:
+			cout << "Invalid choice! Please enter a valid option.\n";
+		}
+	} while (choice != 5);
 
-    // Free memory allocated for the linked list
-    while (head != nullptr) {
-        StructName* temp = head;
-        head = head->next;
-        delete temp;
-    }
+	// Free memory allocated for the linked list
+	while (head != nullptr) {
+		StructName* temp = head;
+		head = head->next;
+		delete temp;
+	}
 
-    return 0;
+	return 0;
 }
 
 // Function to display the main menu
 void MainMenu() {
-    cout << "===== Data Management System =====\n";
-    cout << "1. Add a Data\n";
-    cout << "2. View All Data\n";
-    cout << "3. Update a Data\n";
-    cout << "4. Delete a Data\n";
-    cout << "5. Save Data to File and Exit\n";
-    cout << "Enter your choice: ";
+	cout << "===== Data Management System =====\n";
+	cout << "1. Add a Data\n";
+	cout << "2. View All Data\n";
+	cout << "3. Update a Data\n";
+	cout << "4. Delete a Data\n";
+	cout << "5. Save Data to File and Exit\n";
+	cout << "Enter your choice: ";
 }
 
 // Function to add a new data record
 void AddData(StructName*& head, int& numData, int& dataNoCounter) {
-    StructName* newData = new StructName;
-    cout << "-- PLEASE FILL UP THE FORM WITH YOUR INFO --" << endl;
-    newData->dataNo = dataNoCounter++;
-    cout << "String Data: ";
-    getline(cin, newData->stringData);
-    cout << "Double Data: ";
-    cin >> newData->doubleData;
-    cin.ignore();
+	StructName* newData = new StructName;
 
-    // Insert at the beginning of the list
-    newData->next = head;
-    newData->prev = nullptr;
-    if (head != nullptr) {
-        head->prev = newData;
-    }
-    head = newData;
+	cout << "-- PLEASE FILL UP THE FORM WITH YOUR INFO --" << endl;
+	newData->dataNo = dataNoCounter++;
+	cout << "String Data: ";
+	getline(cin, newData->stringData);
+	cout << "Double Data: ";
+	cin >> newData->doubleData;
+	cin.ignore();
 
-    cout << "New Data has been added successfully!" << endl;
-    numData++;
+	// Insert at the beginning of the list
+	newData->next = head;
+	newData->prev = nullptr;
+	if (head != nullptr) {
+		head->prev = newData;
+	}
+	head = newData;
+
+	cout << "New Data has been added successfully!" << endl;
+	numData++;
 }
 
 // Function to view all data records
 void ViewData(const StructName* head) {
-    const StructName* current = head;
+	const StructName* current = head;
 
-    if (head == nullptr) {
-        cout << "No data in the records yet" << endl;
-        return;
-    }
+	if (head == nullptr) {
+		cout << "No data in the records yet" << endl;
+		return;
+	}
 
-    cout << "Data Records:" << endl;
-    while (current != nullptr) {
-        cout << "Data No: " << current->dataNo << endl;
-        cout << "String Data: " << current->stringData << endl;
-        cout << "Double Data: " << current->doubleData << endl;
-        cout << endl;
-        current = current->next;
-    }
+	cout << "Data Records:" << endl;
+	while (current != nullptr) {
+		cout << "Data No: " << current->dataNo << endl;
+		cout << "String Data: " << current->stringData << endl;
+		cout << "Double Data: " << current->doubleData << endl;
+		cout << endl;
+		current = current->next;
+	}
 }
 
 // Function to update a data record
 void UpdateData(StructName* head) {
-    int dataNo;
+	int dataNo;
+	StructName* current = head;
 
-    if (head == nullptr) {
-        cout << "No data in the records yet" << endl;
-        return;
-    }
+	if (head == nullptr) {
+		cout << "No data in the records yet" << endl;
+		return;
+	}
 
-    cout << "Enter Data No to update: ";
-    cin >> dataNo;
+	cout << "Enter Data No to update: ";
+	cin >> dataNo;
 
-    StructName* current = head;
-    while (current != nullptr) {
-        if (current->dataNo == dataNo) {
-            cout << "Enter new string data: ";
-            cin.ignore();
-            getline(cin, current->stringData);
-            cout << "Enter new double data: ";
-            cin >> current->doubleData;
-            cin.ignore();
-            cout << "Data updated successfully!" << endl;
-            return;
-        }
-        current = current->next;
-    }
+	while (current != nullptr) {
+		if (current->dataNo == dataNo) {
+			cout << "Enter new string data: ";
+			cin.ignore();
+			getline(cin, current->stringData);
+			cout << "Enter new double data: ";
+			cin >> current->doubleData;
+			cin.ignore();
+			cout << "Data updated successfully!" << endl;
+			return;
+		}
+		current = current->next;
+	}
 
-    cout << "Data not found!" << endl;
+	cout << "Data not found!" << endl;
 }
 
 // Function to delete a data record
 void DeleteData(StructName*& head, int& numData) {
-    int dataNo;
+	int dataNo;
+	StructName* current = head;
 
-    if (head == nullptr) {
-        cout << "No data in the records yet" << endl;
-        return;
-    }
+	if (head == nullptr) {
+		cout << "No data in the records yet" << endl;
+		return;
+	}
 
-    cout << "Enter Data No to delete: ";
-    cin >> dataNo;
+	cout << "Enter Data No to delete: ";
+	cin >> dataNo;
 
-    StructName* current = head;
-    while (current != nullptr) {
-        if (current->dataNo == dataNo) {
-            if (current->prev == nullptr) {
-                head = current->next;
-            }
-            else {
-                current->prev->next = current->next;
-            }
-            if (current->next != nullptr) {
-                current->next->prev = current->prev;
-            }
-            delete current;
-            numData--;
-            cout << "Data deleted successfully!" << endl;
-            return;
-        }
-        current = current->next;
-    }
+	while (current != nullptr) {
+		if (current->dataNo == dataNo) {
+			if (current->prev == nullptr) {
+				head = current->next;
+			}
+			else {
+				current->prev->next = current->next;
+			}
+			if (current->next != nullptr) {
+				current->next->prev = current->prev;
+			}
+			delete current;
+			numData--;
+			cout << "Data deleted successfully!" << endl;
+			return;
+		}
+		current = current->next;
+	}
 
-    cout << "Data not found!" << endl;
+	cout << "Data not found!" << endl;
 }
 
 // Function to save data to a file
 void SaveDataToFile(const StructName* head) {
-    ofstream outFile("filename.txt");
-    if (!outFile) {
-        cerr << "Error opening file." << endl;
-        return;
-    }
+	const StructName* current = head;
 
-    const StructName* current = head;
-    while (current != nullptr) {
-        outFile << current->dataNo << " "
-            << current->stringData << " "
-            << current->doubleData << endl;
-        current = current->next;
-    }
+	ofstream outFile("filename.txt");
+	if (!outFile) {
+		cerr << "Error opening file." << endl;
+		return;
+	}
 
-    outFile.close();
+	while (current != nullptr) {
+		outFile << current->dataNo << " "
+			<< current->stringData << " "
+			<< current->doubleData << endl;
+		current = current->next;
+	}
+
+	outFile.close();
 }
 // Function to load data from a file
 void LoadDataFromFile(StructName*& head, int& numData, int& dataNoCounter) {
-    int dataNo;
-    double doubleData;
-    string stringData;
+	int dataNo;
+	double doubleData;
+	string stringData;
+	StructName* newData = new StructName;
 
-    ifstream inFile("filename.txt");
-    if (!inFile) {
-        cerr << "Error opening file." << endl;
-        return;
-    }
+	ifstream inFile("filename.txt");
+	if (!inFile) {
+		cerr << "Error opening file." << endl;
+		return;
+	}
 
 
-    while (inFile >> dataNo >> stringData >> doubleData) {
-        StructName* newData = new StructName;
-        newData->dataNo = dataNo;
-        newData->stringData = stringData;
-        newData->doubleData = doubleData;
-        newData->next = head;
-        newData->prev = nullptr;
-        if (head != nullptr) {
-            head->prev = newData;
-        }
-        head = newData;
-        numData++;
-        if (dataNo >= dataNoCounter) {
-            dataNoCounter = dataNo + 1;
-        }
-    }
+	while (inFile >> dataNo >> stringData >> doubleData) {
+		newData->dataNo = dataNo;
+		newData->stringData = stringData;
+		newData->doubleData = doubleData;
+		newData->next = head;
+		newData->prev = nullptr;
+		if (head != nullptr) {
+			head->prev = newData;
+		}
+		head = newData;
+		numData++;
+		if (dataNo >= dataNoCounter) {
+			dataNoCounter = dataNo + 1;
+		}
+	}
 
-    inFile.close();
+	inFile.close();
 }
