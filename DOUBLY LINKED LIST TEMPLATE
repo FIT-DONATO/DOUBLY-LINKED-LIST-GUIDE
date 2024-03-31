@@ -3,29 +3,29 @@
 using namespace std;
 
 // Struct for storing data records
-struct KindOfProgram {
+struct StructName {
     int dataNo;
     double doubleData;
     string stringData;
-    KindOfProgram* next;
-    KindOfProgram* prev;
+    StructName* next;
+    StructName* prev;
 };
 
 // Function prototypes
 void MainMenu();
-void AddData(KindOfProgram*& head, int& numData, int& dataNoCounter);
-void ViewData(const KindOfProgram* head);
-void UpdateData(KindOfProgram* head);
-void DeleteData(KindOfProgram*& head, int& numData);
+void AddData(StructName*& head, int& numData, int& dataNoCounter);
+void ViewData(const StructName* head);
+void UpdateData(StructName* head);
+void DeleteData(StructName*& head, int& numData);
 
 // Main function
 int main() {
-    KindOfProgram* head = nullptr; // Head pointer of the linked list
     int numData = 0; // Variable to track the number of data
     int dataNoCounter = 1; // Counter to assign unique data numbers
+    int choice;
+    StructName* head = nullptr; // Head pointer of the linked list
 
     // Menu loop
-    int choice;
     do {
         MainMenu();
         cin >> choice;
@@ -63,7 +63,7 @@ int main() {
 
     // Free memory allocated for the linked list
     while (head != nullptr) {
-        KindOfProgram* temp = head;
+        StructName* temp = head;
         head = head->next;
         delete temp;
     }
@@ -83,8 +83,9 @@ void MainMenu() {
 }
 
 // Function to add a new data record
-void AddData(KindOfProgram*& head, int& numData, int& dataNoCounter) {
-    KindOfProgram* newData = new KindOfProgram;
+void AddData(StructName*& head, int& numData, int& dataNoCounter) {
+    StructName* newData = new StructName;
+
     cout << "-- PLEASE FILL UP THE FORM WITH YOUR INFO --" << endl;
     newData->dataNo = dataNoCounter++;
     cout << "String Data: ";
@@ -106,14 +107,15 @@ void AddData(KindOfProgram*& head, int& numData, int& dataNoCounter) {
 }
 
 // Function to view all data records
-void ViewData(const KindOfProgram* head) {
+void ViewData(const StructName* head) {
+    const StructName* current = head;
+
     if (head == nullptr) {
         cout << "No data in the records yet" << endl;
         return;
     }
 
     cout << "Data Records:" << endl;
-    const KindOfProgram* current = head;
     while (current != nullptr) {
         cout << "Data No: " << current->dataNo << endl;
         cout << "String Data: " << current->stringData << endl;
@@ -124,17 +126,18 @@ void ViewData(const KindOfProgram* head) {
 }
 
 // Function to update a data record
-void UpdateData(KindOfProgram* head) {
+void UpdateData(StructName* head) {
+    int dataNo;
+    StructName* current = head;
+
     if (head == nullptr) {
         cout << "No data in the records yet" << endl;
         return;
     }
 
-    int dataNo;
     cout << "Enter Data No to update: ";
     cin >> dataNo;
 
-    KindOfProgram* current = head;
     while (current != nullptr) {
         if (current->dataNo == dataNo) {
             cout << "Enter new string data: ";
@@ -153,17 +156,18 @@ void UpdateData(KindOfProgram* head) {
 }
 
 // Function to delete a data record
-void DeleteData(KindOfProgram*& head, int& numData) {
+void DeleteData(StructName*& head, int& numData) {
+    int dataNo;
+    StructName* current = head;
+
     if (head == nullptr) {
         cout << "No data in the records yet" << endl;
         return;
     }
 
-    int dataNo;
     cout << "Enter Data No to delete: ";
     cin >> dataNo;
 
-    KindOfProgram* current = head;
     while (current != nullptr) {
         if (current->dataNo == dataNo) {
             if (current->prev == nullptr) {
