@@ -4,34 +4,34 @@
 using namespace std;
 
 // Struct for storing data records
-struct KindOfProgram {
+struct StructName {
     int dataNo;
     double doubleData;
     string stringData;
-    KindOfProgram* next;
-    KindOfProgram* prev;
+    StructName* next;
+    StructName* prev;
 };
 
 // Function prototypes
 void MainMenu();
-void AddData(KindOfProgram*& head, int& numData, int& dataNoCounter);
-void ViewData(const KindOfProgram* head);
-void UpdateData(KindOfProgram* head);
-void DeleteData(KindOfProgram*& head, int& numData);
-void SaveDataToFile(const KindOfProgram* head);
-void LoadDataFromFile(KindOfProgram*& head, int& numData, int& dataNoCounter);
+void AddData(StructName*& head, int& numData, int& dataNoCounter);
+void ViewData(const StructName* head);
+void UpdateData(StructName* head);
+void DeleteData(StructName*& head, int& numData);
+void SaveDataToFile(const StructName* head);
+void LoadDataFromFile(StructName*& head, int& numData, int& dataNoCounter);
 
 // Main function
 int main() {
-    KindOfProgram* head = nullptr; // Head pointer of the linked list
     int numData = 0; // Variable to track the number of data
     int dataNoCounter = 1; // Counter to assign unique data numbers
+    int choice;
+    StructName* head = nullptr; // Head pointer of the linked list
 
     // Load data from file
     LoadDataFromFile(head, numData, dataNoCounter);
 
     // Menu loop
-    int choice;
     do {
         MainMenu();
         cin >> choice;
@@ -70,7 +70,7 @@ int main() {
 
     // Free memory allocated for the linked list
     while (head != nullptr) {
-        KindOfProgram* temp = head;
+        StructName* temp = head;
         head = head->next;
         delete temp;
     }
@@ -90,8 +90,8 @@ void MainMenu() {
 }
 
 // Function to add a new data record
-void AddData(KindOfProgram*& head, int& numData, int& dataNoCounter) {
-    KindOfProgram* newData = new KindOfProgram;
+void AddData(StructName*& head, int& numData, int& dataNoCounter) {
+    StructName* newData = new StructName;
     cout << "-- PLEASE FILL UP THE FORM WITH YOUR INFO --" << endl;
     newData->dataNo = dataNoCounter++;
     cout << "String Data: ";
@@ -113,14 +113,15 @@ void AddData(KindOfProgram*& head, int& numData, int& dataNoCounter) {
 }
 
 // Function to view all data records
-void ViewData(const KindOfProgram* head) {
+void ViewData(const StructName* head) {
+    const StructName* current = head;
+
     if (head == nullptr) {
         cout << "No data in the records yet" << endl;
         return;
     }
 
     cout << "Data Records:" << endl;
-    const KindOfProgram* current = head;
     while (current != nullptr) {
         cout << "Data No: " << current->dataNo << endl;
         cout << "String Data: " << current->stringData << endl;
@@ -131,17 +132,18 @@ void ViewData(const KindOfProgram* head) {
 }
 
 // Function to update a data record
-void UpdateData(KindOfProgram* head) {
+void UpdateData(StructName* head) {
+    int dataNo;
+
     if (head == nullptr) {
         cout << "No data in the records yet" << endl;
         return;
     }
 
-    int dataNo;
     cout << "Enter Data No to update: ";
     cin >> dataNo;
 
-    KindOfProgram* current = head;
+    StructName* current = head;
     while (current != nullptr) {
         if (current->dataNo == dataNo) {
             cout << "Enter new string data: ";
@@ -160,17 +162,18 @@ void UpdateData(KindOfProgram* head) {
 }
 
 // Function to delete a data record
-void DeleteData(KindOfProgram*& head, int& numData) {
+void DeleteData(StructName*& head, int& numData) {
+    int dataNo;
+
     if (head == nullptr) {
         cout << "No data in the records yet" << endl;
         return;
     }
 
-    int dataNo;
     cout << "Enter Data No to delete: ";
     cin >> dataNo;
 
-    KindOfProgram* current = head;
+    StructName* current = head;
     while (current != nullptr) {
         if (current->dataNo == dataNo) {
             if (current->prev == nullptr) {
@@ -194,31 +197,38 @@ void DeleteData(KindOfProgram*& head, int& numData) {
 }
 
 // Function to save data to a file
-void SaveDataToFile(const KindOfProgram* head) {
-    ofstream outFile("data.txt");
-    const KindOfProgram* current = head;
-    while (current != nullptr) {
-        outFile << current->dataNo << " "
-                << current->stringData << " "
-                << current->doubleData << endl;
-        current = current->next;
-    }
-    outFile.close();
-    cout << "Data saved to file successfully!\n";
-}
-
-// Function to load data from a file
-void LoadDataFromFile(KindOfProgram*& head, int& numData, int& dataNoCounter) {
-    ifstream inFile("data.txt");
-    if (!inFile.is_open()) {
-        cout << "No existing data file found.\n";
+void SaveDataToFile(const StructName* head) {
+    ofstream outFile("filename.txt");
+    if (!outFile) {
+        cerr << "Error opening file." << endl;
         return;
     }
+
+    const StructName* current = head;
+    while (current != nullptr) {
+        outFile << current->dataNo << " "
+            << current->stringData << " "
+            << current->doubleData << endl;
+        current = current->next;
+    }
+
+    outFile.close();
+}
+// Function to load data from a file
+void LoadDataFromFile(StructName*& head, int& numData, int& dataNoCounter) {
     int dataNo;
     double doubleData;
     string stringData;
+
+    ifstream inFile("filename.txt");
+    if (!inFile) {
+        cerr << "Error opening file." << endl;
+        return;
+    }
+
+
     while (inFile >> dataNo >> stringData >> doubleData) {
-        KindOfProgram* newData = new KindOfProgram;
+        StructName* newData = new StructName;
         newData->dataNo = dataNo;
         newData->stringData = stringData;
         newData->doubleData = doubleData;
@@ -229,9 +239,10 @@ void LoadDataFromFile(KindOfProgram*& head, int& numData, int& dataNoCounter) {
         }
         head = newData;
         numData++;
-        dataNoCounter = max(dataNoCounter, dataNo + 1);
+        if (dataNo >= dataNoCounter) {
+            dataNoCounter = dataNo + 1;
+        }
     }
-    inFile.close();
-    cout << "Data loaded from file successfully!\n";
-}
 
+    inFile.close();
+}
